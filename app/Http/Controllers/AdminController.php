@@ -203,4 +203,36 @@ class AdminController extends Controller
 
         return $permissions;
     }
+
+    public function getRoles()
+    {
+        $user = Auth::user();
+
+        $directPermissions = DB::table('model_has_permissions')
+            ->join('permissions', 'model_has_permissions.permission_id', '=', 'permissions.id')
+            ->where('model_has_permissions.model_id', $user->id)
+            ->where('model_has_permissions.model_type', User::class)
+            ->select('permissions.name')
+            ->pluck('name');
+
+        $rolePermissions = DB::table('model_has_roles')
+            ->join('role_has_permissions', 'model_has_roles.role_id', '=', 'role_has_permissions.role_id')
+            ->join('permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')
+            ->where('model_has_roles.model_id', $user->id)
+            ->where('model_has_roles.model_type', User::class)
+            ->select('permissions.name')
+            ->pluck('name');
+
+        $permissions = $directPermissions->merge($rolePermissions)->unique();
+
+        $roles = Role::latest()->paginate(10);
+
+        return Inertia::render('Admin/Roles', [
+            'admin' => [
+                'roles' => $user->roles,
+                'permissions' => $permissions
+            ],
+            'roles' => $roles,
+        ]);
+    }
 }

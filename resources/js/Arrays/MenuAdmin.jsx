@@ -11,7 +11,7 @@ const MenuAdmin =
             'name': 'Permisos',
         },
         {
-            'href': 'list.users',
+            'href': 'roles.view',
             'icon': 'mdi mdi-account-group-outline',
             'name': 'Roles',
         }

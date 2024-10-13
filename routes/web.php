@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/users/{user}/roles', [AdminController::class, 'updateUserRole'])->name('users.updateRole');
         Route::get('/permissions', [AdminController::class, 'getPermissions'])->name('permission.view');
         Route::post('/permission', [AdminController::class, 'storePermission'])->name('store.permission');
+        Route::get('/roles', [AdminController::class, 'getRoles'])->name('roles.view');
     });
 });
 
