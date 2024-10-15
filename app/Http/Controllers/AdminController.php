@@ -235,4 +235,85 @@ class AdminController extends Controller
             'roles' => $roles,
         ]);
     }
+
+    public function storeRole(Request $request)
+    {
+        $request->validate([
+            'rolename' => [
+                'required',
+                function($attribute, $value, $fail) {
+                    if ($value == '') {
+                        $fail('El campo ' . $attribute . ' Es obligatorio');
+                    }
+
+                    $rol = Role::where('name', $value)->first();
+
+                    if (!empty($rol)) {
+                        $fail('El nombre del rol ya existe.');
+                    }
+                }
+            ]
+        ]);
+
+        Role::create(['name' => $request->rolename]);
+
+        return redirect()->route('roles.view');
+    }
+
+    public function getRolePermissions($id_role)
+    {
+        $rol = Role::findById($id_role);
+
+        $rolePermissions = $rol->permissions;
+        $arrayName = $rolePermissions->pluck('name')->toArray();
+        $permissions = Permission::whereNotIn('name', $arrayName)->get();
+
+        return response()->json(
+            [
+                'permissions_all' => $permissions,
+                'permissions_role' => $rolePermissions,
+            ]
+        );
+    }
+
+    public function updateRolePermission(Request $request)
+    {
+        $request->validate([
+            'Accion' => [
+                'required',
+                'string',
+                function($attribute, $value, $fail) {
+                    if ($value !== 'ADD' && $value !== 'CLEAN') {
+                        $fail('El campo acción debe ser ADD o CLEAN');
+                    }
+                }
+            ],
+            'PermissionName' => [
+                'required',
+                function($attribute, $value, $fail) {
+                    $rolExist = Permission::where('name', $value);
+                    if (!$rolExist) {
+                        $fail('No existe el rol a asignar');
+                    }
+                }
+            ],
+            'RolId' => [
+                'Required',
+            ],
+        ]);
+
+        $rol = Role::find($request->RolId);
+
+        if ($request->Accion == 'ADD') {
+            $rol->givePermissionTo($request->PermissionName);
+            return response()->json(['Permiso agregado correctamente']);
+        }
+
+        if ($request->Accion == 'CLEAN') {
+            $rol->revokePermissionTo($request->PermissionName);
+            return response()->json(['Permiso removido correctamente.']);
+        }
+
+        return response()->json(['Algo desconocido.']);
+    }
 }

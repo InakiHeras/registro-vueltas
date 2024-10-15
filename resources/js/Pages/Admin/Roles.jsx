@@ -8,6 +8,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Transition } from "@headlessui/react";
 import { Head, useForm } from "@inertiajs/react";
 import { useState } from "react";
+import EditRole from "./EditRole";
 
 export default function Roles({ auth, admin, roles }){
     
@@ -27,7 +28,7 @@ export default function Roles({ auth, admin, roles }){
     const renderActions = (item) => (
         <>
             <button className="button small green" type="button" onClick={() => hanldeOpenModalEdit(item)}>
-                <span className="icon"><i className="mdi mdi-eye"></i></span>
+                <span className="icon"><i className="mdi mdi-pencil"></i></span>
             </button>
         </>
     );
@@ -56,7 +57,7 @@ export default function Roles({ auth, admin, roles }){
 
     const addRolPost = (e) => {
         e.preventDefault();
-        post(route('store.role'), {
+        post(route('roles.store'), {
             onSuccess: () => {
                 data.rolename = ''
             },
@@ -128,6 +129,18 @@ export default function Roles({ auth, admin, roles }){
                 </PrimaryButton>
             </div>
 
+            <Modal
+                show={openModalEdit}
+                onClose={hanldeCloseModalEdit}
+                maxWidth='3xl'
+                closeable
+            >
+                <EditRole 
+                    role={rolEdit}
+                />
+
+            </Modal>
+
             <TableData 
                 totalRows={roles.total}
                 columns={columns}
@@ -138,6 +151,7 @@ export default function Roles({ auth, admin, roles }){
                 loading={loading}
                 titleTable="Roles del sistema"
                 classIcon="mdi mdi-account-group-outline"
+                renderActions={renderActions}
             />
         </AuthenticatedLayout>
     )

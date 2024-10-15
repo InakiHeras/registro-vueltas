@@ -39,7 +39,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/permissions', [AdminController::class, 'getPermissions'])->name('permission.view');
         Route::post('/permission', [AdminController::class, 'storePermission'])->name('store.permission');
         Route::get('/roles', [AdminController::class, 'getRoles'])->name('roles.view');
+        Route::post('/roles', [AdminController::class, 'storeRole'])->name('roles.store');
+        Route::get('/role/{id_role}', [AdminController::class, 'getRolePermissions'])->name('get.permissions.role');
+        Route::post('/role/accion', [AdminController::class, 'updateRolePermission'])->name('role.permission.update');
     });
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/api.php';
