@@ -17,6 +17,8 @@ class TurnoAsistente extends Model
         'ClaveAsistente',
         'Nombre',
         'Zona',
+        'ruta',
+        'turno',
         'IdUsuario',
         'FechaInicio',
         'FechaFinalizado',
@@ -28,5 +30,11 @@ class TurnoAsistente extends Model
     public function usuario()
     {
         return $this->belongsTo(User::class, 'IdUsuario');
+    }
+
+    // Relación con las vueltas
+    public function vueltas()
+    {
+        return $this->hasMany(Vuelta::class, 'IdTurnoAsistente', 'IdTurnoAsistente');
     }
 }

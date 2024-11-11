@@ -41,6 +41,18 @@ class VueltasController extends Controller
                                       ->where('Estatus', true)
                                       ->first();
 
+        // Verificar si ya hay una vuelta en curso para el operador
+        $vueltaEnCurso = Vuelta::where('IdTurnoOperador', $request->id_turno_operador)
+                            ->where('Estado', 'En curso')
+                            ->first();
+        
+        if ($vueltaEnCurso) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se puede registrar una nueva vuelta mientras hay una en curso.',
+            ], 400);
+        }
+
         $vuelta = Vuelta::create([
             'id_vuelta_perdida' => $request->id_vuelta_perdida,
             'KilometrajeInicial' => $request->kilometraje_inicial,
@@ -63,8 +75,8 @@ class VueltasController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'kilometraje_final' => 'nullable|integer',
-            'hora_llegada' => 'required|date_format:Y-m-d H:i:s',
-            'boletos_vendidos' => 'required|integer',
+            'hora_llegada' => 'nullable|date_format:Y-m-d H:i:s',
+            'boletos_vendidos' => 'nullable|integer',
             'estado' => 'required|string', // 'En curso' o 'Completada'
         ]);
 
@@ -85,11 +97,17 @@ class VueltasController extends Controller
             ], 404);
         }
 
-        // Actualizar la vuelta
-        $vuelta->KilometrajeFinal = $request->kilometraje_final;
-        $vuelta->HoraLlegada = $request->hora_llegada;
-        $vuelta->BoletosVendidos = $request->boletos_vendidos;
-        $vuelta->Estado = $request->estado;  // Cambiar estado
+        // Actualizar solo los campos que tengan un valor no nulo en el request
+        if (!is_null($request->kilometraje_final)) {
+            $vuelta->KilometrajeFinal = $request->kilometraje_final;
+        }
+        if (!is_null($request->hora_llegada)) {
+            $vuelta->HoraLlegada = $request->hora_llegada;
+        }
+        if (!is_null($request->boletos_vendidos)) {
+            $vuelta->BoletosVendidos = $request->boletos_vendidos;
+        }
+        $vuelta->Estado = $request->estado; // Cambiar estado, siempre se actualiza
         $vuelta->save();
 
         return response()->json([

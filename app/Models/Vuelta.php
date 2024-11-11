@@ -17,7 +17,6 @@ class Vuelta extends Model
         'IdTurnoAsistente',
         'IdTurnoOperador',
         'id_vuelta_perdida',
-        'IdCode',
         'HoraSalida',
         'KilometrajeInicial',
         'HoraLlegada',

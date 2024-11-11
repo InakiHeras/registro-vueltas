@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/operador/abrir', [TurnosController::class, 'abrirTurnoOperador']);
     Route::post('/operador/cerrar', [TurnosController::class, 'cerrarTurnoOperador']);
     Route::post('/operador/verificar', [TurnosController::class, 'verificarTurnoOperador']);
+    Route::post('/turnosoperadores/obtener', [TurnosController::class, 'obtenerTurnoOperador']);
     Route::post('/vueltas/registrar', [VueltasController::class, 'registrarVuelta']);
     Route::get('/vueltas/motivos-perdida', [VueltasController::class, 'listarMotivosPerdida']);
     Route::get('/vueltas/{idTurnoOperador}', [VueltasController::class, 'listarVueltas']);

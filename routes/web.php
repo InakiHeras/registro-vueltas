@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Reports\ReportsController;
 use App\Http\Controllers\Unidades\UnidadesQRController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,9 @@ Route::middleware('auth')->group(function () {
     // Unidades
     Route::get('/units', [UnidadesQRController::class, 'index'])->middleware(['role_or_permission:VIEW_UNITS_CODES|admin'])->name('units.view');
     Route::post('/units', [UnidadesQRController::class, 'storeUnit'])->middleware(['role_or_permission:EDIT_UNITS_CODES|admin'])->name('units.store');
+    // Reportes
+    Route::get('/reports', [ReportsController::class, 'index'])->middleware(['role_or_permission:VIEW_DISPATCH_SHEET|admin'])->name('dispatch.view');
+    Route::get('/exportar-turno-asistente/{idTurnoAsistente}', [ReportsController::class, 'exportTurnoAsistente'])->name('exportar.turnoAsistente');
 
     // Rutas de administrador
     Route::middleware('role:admin')->prefix('admin')->group(function() {

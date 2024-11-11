@@ -50,28 +50,38 @@ class UnidadesQRController extends Controller
     {
         $user = Auth::user();
 
+        // Validar entrada
         $request->validate([
             'Unidad' => 'required|integer',
             'qrImage' => 'required', // Validar la imagen
         ]);
-    
+
         $unidad = $request->Unidad;
+
+        // Comprobar si la unidad ya existe
+        $existingUnit = UnidadesCode::where('Unidad', $unidad)->first();
+        if ($existingUnit) {
+            return redirect()->back()->withErrors(['Unidad' => 'La unidad ya está registrada.']);
+        }
+
+        // Procesar imagen QR
         $qrImageData = $request->qrImage;
-    
         list($type, $qrImageData) = explode(';', $qrImageData);
-        list(, $qrImageData)      = explode(',', $qrImageData);
+        list(, $qrImageData) = explode(',', $qrImageData);
         $qrImageData = base64_decode($qrImageData);
 
         $fileName = 'qrcodes/' . $unidad . '.png';
         Storage::disk('public')->put($fileName, $qrImageData);
-    
+
+        // Crear nueva unidad
         UnidadesCode::create([
             'Unidad' => $unidad,
             'CodeQ' => $fileName,
             'CreatedAt' => now(),
             'CreatedBy' => $user->name,
         ]);
-    
+
         return redirect()->back()->with('success', 'Unidad guardada correctamente');
     }
+
 }

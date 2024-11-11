@@ -31,7 +31,7 @@ const MenuArray = [
         'label': 'Reportes',
         'options': [
             {
-                'href': 'dashboard',
+                'href': 'dispatch.view',
                 'icon': 'mdi mdi-file',
                 'name': 'Hojas de despacho',
                 'permiso': 'VIEW_DISPATCH_SHEET'

@@ -53,6 +53,8 @@ class TurnosController extends Controller
             'ClaveAsistente' => $user->id,
             'Nombre' => $user->name,
             'Zona' => $request->zona,
+            'turno' => $request->turno,
+            'ruta' => $request->ruta,
             'IdUsuario' => $user->id,
             'FechaInicio' => now(),
             'Estatus' => true,
@@ -142,6 +144,37 @@ class TurnosController extends Controller
             200
         );
     }
+
+    public function obtenerTurnoOperador(Request $request)
+{
+    $claveOperador = $request->input('claveOperador');
+
+    // Validar la clave del operador proporcionada
+    if (!$claveOperador) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Clave del operador es requerida.'
+        ], 400);
+    }
+
+    // Buscar el turno asociado al operador que esté abierto
+    $turno = TurnoOperador::where('ClaveOperador', $claveOperador)
+        ->where('Estatus', 1) // Asegurarse de buscar turnos que estén abiertos
+        ->first();
+
+    // Verificar si se encontró el turno
+    if ($turno) {
+        return response()->json([
+            'success' => true,
+            'turno' => $turno
+        ], 200);
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => 'No se encontró un turno abierto para este operador.'
+        ], 404);
+    }
+}
 
     public function cerrarTurnoOperador(Request $request)
     {
