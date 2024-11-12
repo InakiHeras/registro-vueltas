@@ -131,6 +131,7 @@ class TurnosController extends Controller
             'ClaveOperador' => $operador,
             'Operador' => $request->Operador,
             'Turno' => $request->Turno,
+            'Unidad' => $request->Unidad,
             'Ruta' => $request->Ruta,
             'Zona' => $request->Zona,
             'FechaInicio' => now(),

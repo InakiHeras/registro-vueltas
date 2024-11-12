@@ -13,53 +13,23 @@ const TableData = ({
     titleTable,
     classIcon,
     renderActions,
+    links,
 }) => {
     // Configuración para los botones de paginación
-    const pageButtons = [];
-    const totalPages = Math.ceil(totalRows / perPage);
-    const maxPageButtons = 5;
-    
-    // Cálculo de las páginas inicial y final
-    let startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
-    let endPage = Math.min(totalPages, currentPage + Math.floor(maxPageButtons / 2));
-
-    // Ajuste de los botones de inicio y fin
-    if (endPage - startPage + 1 < maxPageButtons) {
-        if (startPage === 1) {
-            endPage = Math.min(totalPages, endPage + (maxPageButtons - (endPage - startPage + 1)));
-        } else {
-            startPage = Math.max(1, startPage - (maxPageButtons - (endPage - startPage + 1)));
+    const pageButtons = links.map((link, index) => {
+        if (!link.url) {
+            return <span key={index} dangerouslySetInnerHTML={{ __html: link.label }} />;
         }
-    }
-
-    // Botón para la primera página y elipsis
-    if (startPage > 1) {
-        pageButtons.push(
-            <button key="1" className={`button ${currentPage === 1 ? "active" : ""}`} onClick={() => setCurrentPage(1)}>
-                1
-            </button>
+    
+        return (
+            <button
+                key={index}
+                className={`button ${link.active ? "active" : ""}`}
+                onClick={() => window.location.href = link.url}
+                dangerouslySetInnerHTML={{ __html: link.label }}
+            />
         );
-        if (startPage > 2) pageButtons.push(<span key="ellipsis-start">...</span>);
-    }
-
-    // Botones de páginas intermedias
-    for (let i = startPage; i <= endPage; i++) {
-        pageButtons.push(
-            <button key={i} className={`button ${i === currentPage ? "active" : ""}`} onClick={() => setCurrentPage(i)}>
-                {i}
-            </button>
-        );
-    }
-
-    // Botón para la última página y elipsis
-    if (endPage < totalPages) {
-        if (endPage < totalPages - 1) pageButtons.push(<span key="ellipsis-end">...</span>);
-        pageButtons.push(
-            <button key={totalPages} className={`button ${currentPage === totalPages ? "active" : ""}`} onClick={() => setCurrentPage(totalPages)}>
-                {totalPages}
-            </button>
-        );
-    }
+    });
 
     return (
         <div className="w-full">
@@ -113,16 +83,10 @@ const TableData = ({
                     <div className="table-pagination">
                         <div className="flex items-center justify-between">
                             <div className="buttons">
-                                <button className="button" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
-                                    Anterior
-                                </button>
                                 {pageButtons}
-                                <button className="button" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage >= totalPages}>
-                                    Siguiente
-                                </button>
                             </div>
                             <small>
-                                Total de registros: {totalRows} - Página {currentPage} de {totalPages}
+                                Total de registros: {totalRows} - Página {currentPage} de {Math.ceil(totalRows / perPage)}
                             </small>
                         </div>
                     </div>
@@ -144,6 +108,7 @@ TableData.propTypes = {
     titleTable: PropTypes.string,
     classIcon: PropTypes.string,
     renderActions: PropTypes.func,
+    links: PropTypes.array.isRequired,  // Agregar links como propiedad requerida
 };
 
 export default TableData;

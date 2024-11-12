@@ -4,7 +4,9 @@ import { Head } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function VueltasReports({ auth, admin, turnosAsistente }) {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(turnosAsistente.current_page);
+
+    console.log(turnosAsistente);
 
     const columns = [
         { name: "Asistente", campo: "Nombre" },
@@ -27,34 +29,40 @@ export default function VueltasReports({ auth, admin, turnosAsistente }) {
         },
     ];
 
+    // Asignar `id` a cada registro en `turnosAsistente.data` a partir de `IdTurnoAsistente`
+    const dataWithId = turnosAsistente.data.map((row) => ({
+        ...row,
+        id: row.IdTurnoAsistente, // Añadir la propiedad `id` para que `TableData` pueda utilizarla como clave
+    }));
+
     const handleDownload = (idTurnoAsistente) => {
         window.location.href = route("exportar.turnoAsistente", idTurnoAsistente);
     };
 
     return (
         <AuthenticatedLayout
-        user = {auth.user}
-        admin = {admin}
-        header = {
-            <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                Reportes
-            </h2>
-        }>
+            user={auth.user}
+            admin={admin}
+            header={
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                    Reportes
+                </h2>
+            }
+        >
+            <Head title="Reportes de Vueltas" />
 
-        <Head title="Reportes de Vueltas" />
-
-        <div className="p-4 bg-white shadow rounded-lg">
+            <div className="p-4 bg-white shadow rounded-lg">
                 <TableData
                     totalRows={turnosAsistente.total}
                     columns={columns}
-                    data={turnosAsistente.data}
+                    data={dataWithId} // Usar los datos con `id` asignado
                     perPage={turnosAsistente.per_page}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                     titleTable="Lista de Turnos del Asistente"
+                    links={turnosAsistente.links}
                 />
-        </div>
-
+            </div>
         </AuthenticatedLayout>
-    )
+    );
 }

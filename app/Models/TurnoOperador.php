@@ -16,7 +16,8 @@ class TurnoOperador extends Model
     protected $fillable = [
         'ClaveOperador', 
         'Operador', 
-        'Turno', 
+        'Turno',
+        'Unidad', 
         'Ruta', 
         'Zona', 
         'FechaInicio', 
