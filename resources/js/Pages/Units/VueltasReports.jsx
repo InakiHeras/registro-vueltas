@@ -16,14 +16,14 @@ export default function VueltasReports({ auth, admin, turnosAsistente }) {
         { name: "Fecha Inicio", campo: "FechaInicio" },
         { name: "Fecha Fin", campo: "FechaFinalizado" },
         {
-            name: "Acciones",
+            name: "Descargar Reporte",
             campo: "acciones",
             render: (row) => (
                 <button
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                     onClick={() => handleDownload(row.IdTurnoAsistente)}
                 >
-                    Descargar Reporte
+                    <span className="mdi mdi-file-excel"></span>
                 </button>
             ),
         },

@@ -99,6 +99,7 @@ export default function Users({ auth, admin, users }) {
                 titleTable="Lista de Usuarios"
                 classIcon="mdi mdi-account-multiple"
                 renderActions={renderActions}
+                links={users.links}
             />
 
         </AuthenticatedLayout>

@@ -63,6 +63,7 @@ export default function Permissions({ auth, admin, permissions }) {
                 loading={loading}
                 titleTable="Permisos del sistema"
                 classIcon="mdi mdi-account-multiple"
+                links={permissions.allPermissions.links}
             />
 
         </AuthenticatedLayout>

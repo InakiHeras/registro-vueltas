@@ -12,6 +12,7 @@ Route::post('/login_app', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/turno/abrir', [TurnosController::class, 'abrirTurno']);
     Route::post('/turno/cerrar', [TurnosController::class, 'cerrarTurno']);
+    Route::get('/turnos/{idTurnoAsistente}/resumen-vueltas', [TurnosController::class, 'obtenerResumenVueltasDelTurno']);
     Route::get('/turno/verificar', [TurnosController::class, 'verficarTurnoAbierto']);
     Route::post('/operador/abrir', [TurnosController::class, 'abrirTurnoOperador']);
     Route::post('/operador/cerrar', [TurnosController::class, 'cerrarTurnoOperador']);

@@ -77,7 +77,8 @@ class VueltasController extends Controller
             'kilometraje_final' => 'nullable|integer',
             'hora_llegada' => 'nullable|date_format:Y-m-d H:i:s',
             'boletos_vendidos' => 'nullable|integer',
-            'estado' => 'required|string', // 'En curso' o 'Completada'
+            'motivo_perdida' => 'nullable|integer',
+            'estado' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -106,6 +107,9 @@ class VueltasController extends Controller
         }
         if (!is_null($request->boletos_vendidos)) {
             $vuelta->BoletosVendidos = $request->boletos_vendidos;
+        }
+        if (!is_null($request->motivo_perdida)) {
+            $vuelta->id_vuelta_perdida = $request->motivo_perdida;
         }
         $vuelta->Estado = $request->estado; // Cambiar estado, siempre se actualiza
         $vuelta->save();

@@ -68,6 +68,7 @@ export default function Units({ auth, admin, units }){
                 loading={loading}
                 titleTable="Lista de Unidades"
                 classIcon="mdi mdi-bus"
+                links={units.links}
             />
         </AuthenticatedLayout>
     )

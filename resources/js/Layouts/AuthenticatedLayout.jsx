@@ -148,17 +148,17 @@ export default function AuthenticatedLayout({ header, children, admin, accionNav
                     <div className="navbar-end">
                         <div className="navbar-item dropdown has-divider has-user-avatar">
                             <a className="navbar-link">
-                                <div className="user-avatar">
+                                {/*<div className="user-avatar">
                                     <img src="https://api.dicebear.com/9.x/initials/svg?seed=john-doe" alt="John Doe" className="rounded-full"/>
-                                </div>
+                                </div>*/}
                                 <div className="is-user-name"><span> {user.name} </span></div>
                                 <span className="icon"><i className="mdi mdi-chevron-down"></i></span>
                             </a>
                             <div className="navbar-dropdown">
-                                <a href="/profile" className="navbar-item">
+                                {/*<a href="/profile" className="navbar-item">
                                     <span className="icon"><i className="mdi mdi-account"></i></span>
                                     <span>Perfil</span>
-                                </a>
+                                </a>*/}
                                 <a className="navbar-item">
                                     <span className="icon"><i className="mdi mdi-logout"></i></span>
                                     <span>Cerrar sesión</span>

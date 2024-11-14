@@ -152,6 +152,7 @@ export default function Roles({ auth, admin, roles }){
                 titleTable="Roles del sistema"
                 classIcon="mdi mdi-account-group-outline"
                 renderActions={renderActions}
+                links={roles.links}
             />
         </AuthenticatedLayout>
     )

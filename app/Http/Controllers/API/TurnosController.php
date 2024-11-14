@@ -115,6 +115,39 @@ class TurnosController extends Controller
         return response()->json(['turno_abierto' => false], 200); 
     }
 
+    public function obtenerResumenVueltasDelTurno($idTurnoAsistente)
+    {
+        $vueltas = Vuelta::where('IdTurnoAsistente', $idTurnoAsistente)
+            ->with('turnoOperador') // Para traer la información del operador
+            ->get();
+
+        $resumen = [];
+
+        foreach ($vueltas as $vuelta) {
+            $claveOperador = $vuelta->turnoOperador->ClaveOperador;
+            $operador = $vuelta->turnoOperador->Operador;
+
+            if (!isset($resumen[$claveOperador])) {
+                $resumen[$claveOperador] = [
+                    'operador' => $operador,
+                    'vueltas' => [],
+                ];
+            }
+
+            $resumen[$claveOperador]['vueltas'][] = [
+                'IdVuelta' => $vuelta->IdVuelta,
+                'HoraSalida' => $vuelta->HoraSalida,
+                'HoraLlegada' => $vuelta->HoraLlegada,
+                'KilometrajeInicial' => $vuelta->KilometrajeInicial,
+                'KilometrajeFinal' => $vuelta->KilometrajeFinal,
+                'BoletosVendidos' => $vuelta->BoletosVendidos,
+                'Estado' => $vuelta->Estado,
+            ];
+        }
+
+        return response()->json(['resumen' => $resumen], 200);
+    }
+
     public function abrirTurnoOperador(Request $request)
     {
         $operador = (int)$request->ClaveOperador;
